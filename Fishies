@@ -1,0 +1,728 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+
+-- Create main screen GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "MobileGUI"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = PlayerGui
+
+-- Main frame (HORIZONTAL LAYOUT)
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 380, 0, 280) -- Horizontal: wider but shorter
+MainFrame.Position = UDim2.new(0.5, -190, 0.5, -140)
+MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+MainFrame.Parent = ScreenGui
+
+-- Corner
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 6)
+Corner.Parent = MainFrame
+
+-- Stroke
+local Stroke = Instance.new("UIStroke")
+Stroke.Color = Color3.fromRGB(80, 80, 80)
+Stroke.Thickness = 2
+Stroke.Parent = MainFrame
+
+-- Title bar (HORIZONTAL)
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 35)
+TitleBar.Position = UDim2.new(0, 0, 0, 0)
+TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TitleBar.BorderSizePixel = 0
+TitleBar.Parent = MainFrame
+
+local TitleCorner = Instance.new("UICorner")
+TitleCorner.CornerRadius = UDim.new(0, 6)
+TitleCorner.Parent = TitleBar
+
+-- Title text
+local TitleText = Instance.new("TextLabel")
+TitleText.Name = "TitleText"
+TitleText.Size = UDim2.new(0, 150, 1, 0)
+TitleText.Position = UDim2.new(0, 10, 0, 0)
+TitleText.BackgroundTransparency = 1
+TitleText.Text = "duminik.gg"
+TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleText.TextXAlignment = Enum.TextXAlignment.Left
+TitleText.Font = Enum.Font.GothamBold
+TitleText.TextSize = 14
+TitleText.Parent = TitleBar
+
+-- Minimize button
+local MinimizeButton = Instance.new("TextButton")
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
+MinimizeButton.Position = UDim2.new(1, -55, 0.5, -12.5)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+MinimizeButton.BorderSizePixel = 0
+MinimizeButton.Text = "–"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.TextSize = 16
+MinimizeButton.Parent = TitleBar
+
+local MinCorner = Instance.new("UICorner")
+MinCorner.CornerRadius = UDim.new(0, 4)
+MinCorner.Parent = MinimizeButton
+
+-- Exit button
+local ExitButton = Instance.new("TextButton")
+ExitButton.Name = "ExitButton"
+ExitButton.Size = UDim2.new(0, 25, 0, 25)
+ExitButton.Position = UDim2.new(1, -25, 0.5, -12.5)
+ExitButton.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+ExitButton.BorderSizePixel = 0
+ExitButton.Text = "X"
+ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExitButton.Font = Enum.Font.GothamBold
+ExitButton.TextSize = 12
+ExitButton.Parent = TitleBar
+
+local ExitCorner = Instance.new("UICorner")
+ExitCorner.CornerRadius = UDim.new(0, 4)
+ExitCorner.Parent = ExitButton
+
+-- Top Tabs for Horizontal Layout
+local TopTabContainer = Instance.new("Frame")
+TopTabContainer.Name = "TopTabContainer"
+TopTabContainer.Size = UDim2.new(1, 0, 0, 40)
+TopTabContainer.Position = UDim2.new(0, 0, 0, 35)
+TopTabContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TopTabContainer.BorderSizePixel = 0
+TopTabContainer.Parent = MainFrame
+
+-- Content area (HORIZONTAL)
+local ContentArea = Instance.new("Frame")
+ContentArea.Name = "ContentArea"
+ContentArea.Size = UDim2.new(1, 0, 1, -75) -- Adjusted for top tabs
+ContentArea.Position = UDim2.new(0, 0, 0, 75)
+ContentArea.BackgroundTransparency = 1
+ContentArea.Parent = MainFrame
+
+-- Tab buttons (HORIZONTAL LAYOUT)
+local tabs = {
+    {name = "BAITS", key = "Shop"},
+    {name = "GEAR", key = "Gear"},
+    {name = "EGGS", key = "Egg"},
+    {name = "MERCHANT", key = "Merchant"},
+    {name = "EVENT", key = "Event"},
+    {name = "MISC", key = "Misc"}
+}
+
+local tabButtons = {}
+
+for i, tab in pairs(tabs) do
+    local tabButton = Instance.new("TextButton")
+    tabButton.Name = tab.key .. "Tab"
+    tabButton.Size = UDim2.new(1 / #tabs, 0, 1, 0)
+    tabButton.Position = UDim2.new((i-1) / #tabs, 0, 0, 0)
+    tabButton.BackgroundColor3 = i == 1 and Color3.fromRGB(60, 60, 60) or Color3.fromRGB(35, 35, 35)
+    tabButton.BorderSizePixel = 0
+    tabButton.Text = tab.name
+    tabButton.TextColor3 = i == 1 and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(200, 200, 200)
+    tabButton.Font = i == 1 and Enum.Font.GothamBold or Enum.Font.Gotham
+    tabButton.TextSize = 9
+    tabButton.Parent = TopTabContainer
+    
+    tabButtons[tab.key] = tabButton
+end
+
+-- Content frames
+local ShopContent = Instance.new("Frame")
+ShopContent.Name = "ShopContent"
+ShopContent.Size = UDim2.new(1, 0, 1, 0)
+ShopContent.Position = UDim2.new(0, 0, 0, 0)
+ShopContent.BackgroundTransparency = 1
+ShopContent.Visible = true
+ShopContent.Parent = ContentArea
+
+local GearContent = Instance.new("Frame")
+GearContent.Name = "GearContent"
+GearContent.Size = UDim2.new(1, 0, 1, 0)
+GearContent.Position = UDim2.new(0, 0, 0, 0)
+GearContent.BackgroundTransparency = 1
+GearContent.Visible = false
+GearContent.Parent = ContentArea
+
+local EggContent = Instance.new("Frame")
+EggContent.Name = "EggContent"
+EggContent.Size = UDim2.new(1, 0, 1, 0)
+EggContent.Position = UDim2.new(0, 0, 0, 0)
+EggContent.BackgroundTransparency = 1
+EggContent.Visible = false
+EggContent.Parent = ContentArea
+
+local MerchantContent = Instance.new("Frame")
+MerchantContent.Name = "MerchantContent"
+MerchantContent.Size = UDim2.new(1, 0, 1, 0)
+MerchantContent.Position = UDim2.new(0, 0, 0, 0)
+MerchantContent.BackgroundTransparency = 1
+MerchantContent.Visible = false
+MerchantContent.Parent = ContentArea
+
+local EventContent = Instance.new("Frame")
+EventContent.Name = "EventContent"
+EventContent.Size = UDim2.new(1, 0, 1, 0)
+EventContent.Position = UDim2.new(0, 0, 0, 0)
+EventContent.BackgroundTransparency = 1
+EventContent.Visible = false
+EventContent.Parent = ContentArea
+
+local MiscContent = Instance.new("Frame")
+MiscContent.Name = "MiscContent"
+MiscContent.Size = UDim2.new(1, 0, 1, 0)
+MiscContent.Position = UDim2.new(0, 0, 0, 0)
+MiscContent.BackgroundTransparency = 1
+MiscContent.Visible = false
+MiscContent.Parent = ContentArea
+
+-- Scrolling frames (ADJUSTED FOR HORIZONTAL LAYOUT)
+local function createScrollFrame(parent)
+    local scroll = Instance.new("ScrollingFrame")
+    scroll.Size = UDim2.new(1, -5, 1, -5)
+    scroll.Position = UDim2.new(0, 2, 0, 2)
+    scroll.BackgroundTransparency = 1
+    scroll.BorderSizePixel = 0
+    scroll.ScrollBarThickness = 3
+    scroll.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    scroll.Parent = parent
+    
+    local layout = Instance.new("UIListLayout")
+    layout.Padding = UDim.new(0, 5)
+    layout.Parent = scroll
+    
+    return scroll, layout
+end
+
+local ShopScroll, ShopListLayout = createScrollFrame(ShopContent)
+local GearScroll, GearListLayout = createScrollFrame(GearContent)
+local EggScroll, EggListLayout = createScrollFrame(EggContent)
+local MerchantScroll, MerchantListLayout = createScrollFrame(MerchantContent)
+local EventScroll, EventListLayout = createScrollFrame(EventContent)
+local MiscScroll, MiscListLayout = createScrollFrame(MiscContent)
+
+-- Mobile drag functionality
+local UserInputService = game:GetService("UserInputService")
+local dragging = false
+local dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+TitleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+TitleBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Button functions
+local isMinimized = false
+local originalSize = MainFrame.Size
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    if isMinimized then
+        MainFrame.Size = UDim2.new(0, 380, 0, 35)
+        TopTabContainer.Visible = false
+        ContentArea.Visible = false
+    else
+        MainFrame.Size = originalSize
+        TopTabContainer.Visible = true
+        ContentArea.Visible = true
+    end
+end)
+
+ExitButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Button hover effects
+MinimizeButton.MouseEnter:Connect(function()
+    MinimizeButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+end)
+
+MinimizeButton.MouseLeave:Connect(function()
+    MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+end)
+
+ExitButton.MouseEnter:Connect(function()
+    ExitButton.BackgroundColor3 = Color3.fromRGB(220, 80, 80)
+end)
+
+ExitButton.MouseLeave:Connect(function()
+    ExitButton.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+end)
+
+-- Tab hover effects
+for _, tabButton in pairs(tabButtons) do
+    tabButton.MouseEnter:Connect(function()
+        if tabButton.BackgroundColor3 ~= Color3.fromRGB(60, 60, 60) then
+            tabButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+        end
+    end)
+    
+    tabButton.MouseLeave:Connect(function()
+        if tabButton.BackgroundColor3 ~= Color3.fromRGB(60, 60, 60) then
+            tabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        end
+    end)
+end
+
+-- Tab switching function
+local function switchToTab(tabName)
+    -- Reset all tabs
+    ShopContent.Visible = false
+    GearContent.Visible = false
+    EggContent.Visible = false
+    MerchantContent.Visible = false
+    EventContent.Visible = false
+    MiscContent.Visible = false
+    
+    -- Reset all tab buttons
+    for _, tabButton in pairs(tabButtons) do
+        tabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        tabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+        tabButton.Font = Enum.Font.Gotham
+    end
+    
+    -- Activate selected tab
+    if tabName == "Shop" then
+        ShopContent.Visible = true
+        tabButtons.Shop.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Shop.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Shop.Font = Enum.Font.GothamBold
+    elseif tabName == "Gear" then
+        GearContent.Visible = true
+        tabButtons.Gear.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Gear.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Gear.Font = Enum.Font.GothamBold
+    elseif tabName == "Egg" then
+        EggContent.Visible = true
+        tabButtons.Egg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Egg.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Egg.Font = Enum.Font.GothamBold
+    elseif tabName == "Merchant" then
+        MerchantContent.Visible = true
+        tabButtons.Merchant.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Merchant.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Merchant.Font = Enum.Font.GothamBold
+    elseif tabName == "Event" then
+        EventContent.Visible = true
+        tabButtons.Event.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Event.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Event.Font = Enum.Font.GothamBold
+    elseif tabName == "Misc" then
+        MiscContent.Visible = true
+        tabButtons.Misc.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        tabButtons.Misc.TextColor3 = Color3.fromRGB(255, 255, 255)
+        tabButtons.Misc.Font = Enum.Font.GothamBold
+    end
+end
+
+-- Connect tab buttons
+tabButtons.Shop.MouseButton1Click:Connect(function() switchToTab("Shop") end)
+tabButtons.Gear.MouseButton1Click:Connect(function() switchToTab("Gear") end)
+tabButtons.Egg.MouseButton1Click:Connect(function() switchToTab("Egg") end)
+tabButtons.Merchant.MouseButton1Click:Connect(function() switchToTab("Merchant") end)
+tabButtons.Event.MouseButton1Click:Connect(function() switchToTab("Event") end)
+tabButtons.Misc.MouseButton1Click:Connect(function() switchToTab("Misc") end)
+
+-- Active items tracker
+local activeItems = {}
+
+-- Function to create toggle buttons (SMALLER FOR HORIZONTAL LAYOUT)
+local function createToggle(realName, displayName, description, parent, purchaseType, isMerchant)
+    local ToggleFrame = Instance.new("Frame")
+    ToggleFrame.Size = UDim2.new(1, 0, 0, 40) -- Smaller for horizontal layout
+    ToggleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ToggleFrame.BorderSizePixel = 0
+    ToggleFrame.Parent = parent
+    
+    local ToggleCorner = Instance.new("UICorner")
+    ToggleCorner.CornerRadius = UDim.new(0, 4)
+    ToggleCorner.Parent = ToggleFrame
+    
+    local ToggleStroke = Instance.new("UIStroke")
+    ToggleStroke.Color = Color3.fromRGB(80, 80, 80)
+    ToggleStroke.Thickness = 1
+    ToggleStroke.Parent = ToggleFrame
+    
+    local ToggleLabel = Instance.new("TextLabel")
+    ToggleLabel.Size = UDim2.new(0.65, -8, 0.6, 0)
+    ToggleLabel.Position = UDim2.new(0, 6, 0, 2)
+    ToggleLabel.BackgroundTransparency = 1
+    ToggleLabel.Text = displayName
+    ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ToggleLabel.Font = Enum.Font.GothamBold
+    ToggleLabel.TextSize = 11
+    ToggleLabel.Parent = ToggleFrame
+    
+    local DescLabel = Instance.new("TextLabel")
+    DescLabel.Size = UDim2.new(0.65, -8, 0.4, 0)
+    DescLabel.Position = UDim2.new(0, 6, 0.6, 0)
+    DescLabel.BackgroundTransparency = 1
+    DescLabel.Text = description
+    DescLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+    DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+    DescLabel.Font = Enum.Font.Gotham
+    DescLabel.TextSize = 8
+    DescLabel.Parent = ToggleFrame
+    
+    local ToggleButton = Instance.new("TextButton")
+    ToggleButton.Size = UDim2.new(0, 50, 0, 22) -- Smaller button
+    ToggleButton.Position = UDim2.new(1, -55, 0.5, -11)
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    ToggleButton.BorderSizePixel = 0
+    ToggleButton.Text = "OFF"
+    ToggleButton.TextColor3 = Color3.fromRGB(255, 100, 100)
+    ToggleButton.Font = Enum.Font.GothamBold
+    ToggleButton.TextSize = 9
+    ToggleButton.Parent = ToggleFrame
+    
+    local ButtonCorner = Instance.new("UICorner")
+    ButtonCorner.CornerRadius = UDim.new(0, 4)
+    ButtonCorner.Parent = ToggleButton
+    
+    -- Button hover effects
+    ToggleButton.MouseEnter:Connect(function()
+        if ToggleButton.Text == "OFF" then
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+        else
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 200, 90)
+        end
+    end)
+    
+    ToggleButton.MouseLeave:Connect(function()
+        if ToggleButton.Text == "OFF" then
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+        else
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(60, 180, 80)
+        end
+    end)
+    
+    local isToggled = false
+    
+    ToggleButton.MouseButton1Click:Connect(function()
+        isToggled = not isToggled
+        if isToggled then
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(60, 180, 80)
+            ToggleButton.Text = "ON"
+            ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            print("🟢 Auto " .. displayName .. " - ON")
+            
+            -- Add to active items
+            activeItems[realName] = {
+                realName = realName,
+                displayName = displayName,
+                purchaseType = purchaseType,
+                isMerchant = isMerchant,
+                lastPurchase = 0
+            }
+            
+            -- Start purchasing loop for this item
+            task.spawn(function()
+                while activeItems[realName] do
+                    local currentTime = tick()
+                    
+                    -- Check if 1 second has passed since last purchase
+                    if currentTime - activeItems[realName].lastPurchase >= 1 then
+                        if isMerchant then
+                            -- Merchant items use different args format
+                            local args = {"travelling", realName}
+                            game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("remo"):WaitForChild("src"):WaitForChild("container"):WaitForChild("merchant.purchaseItem"):FireServer(unpack(args))
+                        else
+                            local args = {realName}
+                            if purchaseType == "gear" then
+                                game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("remo"):WaitForChild("src"):WaitForChild("container"):WaitForChild("shop.purchaseGear"):FireServer(unpack(args))
+                            elseif purchaseType == "egg" then
+                                game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("remo"):WaitForChild("src"):WaitForChild("container"):WaitForChild("shop.purchaseEgg"):FireServer(unpack(args))
+                            else
+                                game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("remo"):WaitForChild("src"):WaitForChild("container"):WaitForChild("shop.purchaseBait"):FireServer(unpack(args))
+                            end
+                        end
+                        
+                        -- Update last purchase time
+                        activeItems[realName].lastPurchase = currentTime
+                        print("✅ Purchased: " .. displayName)
+                    end
+                    
+                    task.wait(0.1)
+                end
+            end)
+        else
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+            ToggleButton.Text = "OFF"
+            ToggleButton.TextColor3 = Color3.fromRGB(255, 100, 100)
+            print("🔴 Auto " .. displayName .. " - OFF")
+            
+            -- Remove from active items
+            activeItems[realName] = nil
+        end
+    end)
+    
+    -- Update scroll frame size
+    if parent == ShopScroll then
+        ShopScroll.CanvasSize = UDim2.new(0, 0, 0, ShopListLayout.AbsoluteContentSize.Y + 10)
+    elseif parent == GearScroll then
+        GearScroll.CanvasSize = UDim2.new(0, 0, 0, GearListLayout.AbsoluteContentSize.Y + 10)
+    elseif parent == EggScroll then
+        EggScroll.CanvasSize = UDim2.new(0, 0, 0, EggListLayout.AbsoluteContentSize.Y + 10)
+    elseif parent == MerchantScroll then
+        MerchantScroll.CanvasSize = UDim2.new(0, 0, 0, MerchantListLayout.AbsoluteContentSize.Y + 10)
+    elseif parent == EventScroll then
+        EventScroll.CanvasSize = UDim2.new(0, 0, 0, EventListLayout.AbsoluteContentSize.Y + 10)
+    elseif parent == MiscScroll then
+        MiscScroll.CanvasSize = UDim2.new(0, 0, 0, MiscListLayout.AbsoluteContentSize.Y + 10)
+    end
+end
+
+-- Create Shop baits
+local baits = {
+    {real = "Starter", display = "Starter"},
+    {real = "Novice", display = "Novice"},
+    {real = "Reef", display = "Reef"},
+    {real = "DeepSea", display = "Deep Sea"},
+    {real = "Koi", display = "Koi"},
+    {real = "River", display = "River"},
+    {real = "Puffer", display = "Puffer"},
+    {real = "Glo", display = "Glo"},
+    {real = "Seal", display = "Seal"},
+    {real = "Ray", display = "Ray"},
+    {real = "Octopus", display = "Octopus"},
+    {real = "Axolotl", display = "Axolotl"},
+    {real = "Jelly", display = "Jelly"},
+    {real = "Whale", display = "Whale"},
+    {real = "Shark", display = "Shark"},
+    {real = "Squid", display = "Squid"},
+    {real = "Megalodon", display = "Megalodon"},
+    {real = "Kraken", display = "Kraken"}
+}
+
+for _, bait in pairs(baits) do
+    createToggle(bait.real, bait.display, "Auto buy " .. bait.display .. " bait", ShopScroll, "bait", false)
+end
+
+-- Create Gear items
+local gears = {
+    {real = "BasicAutoFeeder", display = "Basic Auto Feeder"},
+    {real = "FoodScoop", display = "Food Scoop"},
+    {real = "BasicFoodTray", display = "Basic Food Tray"},
+    {real = "NetMover", display = "Net Mover"},
+    {real = "MagnifyingGlass", display = "Magnifying Glass"},
+    {real = "AdvancedFoodTray", display = "Advanced Food Tray"},
+    {real = "AdvancedAutoFeeder", display = "Advanced Auto Feeder"},
+    {real = "XpCookie", display = "XP Cookie"},
+    {real = "TeleportWand", display = "Teleport Wand"},
+    {real = "StarLock", display = "Star Lock"},
+    {real = "SupremeAutoFeeder", display = "Supreme Auto Feeder"},
+    {real = "PetToy", display = "Pet Toy"},
+    {real = "EggHatcher", display = "Egg Hatcher"},
+    {real = "GoldenCookie", display = "Golden Cookie"},
+    {real = "EggIncubator", display = "Egg Incubator"},
+    {real = "ExtremeAutoFeeder", display = "Extreme Auto Feeder"}
+}
+
+for _, gear in pairs(gears) do
+    createToggle(gear.real, gear.display, "Auto buy " .. gear.display, GearScroll, "gear", false)
+end
+
+-- Create Egg items
+local eggs = {
+    {real = "Starter", display = "Starter"},
+    {real = "Novice", display = "Novice"},
+    {real = "Forest", display = "Forest"},
+    {real = "Polar", display = "Polar"},
+    {real = "Tropical", display = "Tropical"},
+    {real = "Exotic", display = "Exotic"}
+}
+
+for _, egg in pairs(eggs) do
+    createToggle(egg.real, egg.display, "Auto buy " .. egg.display .. " egg", EggScroll, "egg", false)
+end
+
+-- Merchant items
+local merchantItems = {
+    {real = "Zoo", display = "Zoo"},
+    {real = "Wild", display = "Wild"},
+    {real = "Punk", display = "Punk"},
+    {real = "Boba", display = "Boba"},
+    {real = "Ashen", display = "Ashen"}
+}
+
+for _, item in pairs(merchantItems) do
+    createToggle(item.real, item.display, "Auto buy " .. item.display, MerchantScroll, "merchant", true)
+end
+
+-- EVENT TAB: Custom Design with Avatar
+local eventContainer = Instance.new("Frame")
+eventContainer.Size = UDim2.new(1, -10, 1, -10)
+eventContainer.Position = UDim2.new(0, 5, 0, 5)
+eventContainer.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
+eventContainer.Parent = EventContent
+
+local eventCorner = Instance.new("UICorner")
+eventCorner.CornerRadius = UDim.new(0, 8)
+eventCorner.Parent = eventContainer
+
+-- Avatar Image
+local avatarImage = Instance.new("ImageLabel")
+avatarImage.Size = UDim2.new(0, 80, 0, 80)
+avatarImage.Position = UDim2.new(0.5, -40, 0.3, -40)
+avatarImage.BackgroundTransparency = 1
+avatarImage.Image = "rbxassetid://93209308587194" -- Your avatar image
+avatarImage.Parent = eventContainer
+
+-- Message Label
+local eventMessage = Instance.new("TextLabel")
+eventMessage.Size = UDim2.new(0.8, 0, 0, 60)
+eventMessage.Position = UDim2.new(0.1, 0, 0.7, 0)
+eventMessage.BackgroundTransparency = 1
+eventMessage.Text = "coming soon\nbecause the owner is lazy ass fvck"
+eventMessage.TextColor3 = Color3.fromRGB(255, 100, 100)
+eventMessage.Font = Enum.Font.GothamBold
+eventMessage.TextSize = 12
+eventMessage.TextWrapped = true
+eventMessage.TextYAlignment = Enum.TextYAlignment.Top
+eventMessage.Parent = eventContainer
+
+-- MISC TAB: Auto Sell All Fish
+local sellBtn = Instance.new("TextButton")
+sellBtn.Size = UDim2.new(1, -10, 0, 35)
+sellBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+sellBtn.Text = "Auto Sell All Fish"
+sellBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+sellBtn.Font = Enum.Font.GothamBold
+sellBtn.TextSize = 11
+sellBtn.Parent = MiscScroll
+
+local sellCorner = Instance.new("UICorner")
+sellCorner.CornerRadius = UDim.new(0, 6)
+sellCorner.Parent = sellBtn
+
+sellBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        game:GetService("ReplicatedStorage")
+            :WaitForChild("rbxts_include")
+            :WaitForChild("node_modules")
+            :WaitForChild("@rbxts")
+            :WaitForChild("remo")
+            :WaitForChild("src")
+            :WaitForChild("container")
+            :WaitForChild("sellFish.sellAllFish")
+            :FireServer()
+    end)
+end)
+
+-- MISC TAB: PROPER ANTI-AFK SYSTEM
+local antiAfkEnabled = false
+local afkStartTime = 0
+
+local afkToggle = Instance.new("TextButton")
+afkToggle.Size = UDim2.new(1, -10, 0, 40)
+afkToggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+afkToggle.Text = "Anti-AFK: OFF"
+afkToggle.TextColor3 = Color3.fromRGB(255, 100, 100)
+afkToggle.Font = Enum.Font.GothamBold
+afkToggle.TextSize = 11
+afkToggle.Parent = MiscScroll
+
+local afkCorner = Instance.new("UICorner")
+afkCorner.CornerRadius = UDim.new(0, 6)
+afkCorner.Parent = afkToggle
+
+local afkTimerLabel = Instance.new("TextLabel")
+afkTimerLabel.Size = UDim2.new(1, -10, 0, 25)
+afkTimerLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
+afkTimerLabel.Text = "Uptime: 00:00:00"
+afkTimerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+afkTimerLabel.Font = Enum.Font.Gotham
+afkTimerLabel.TextSize = 9
+afkTimerLabel.Parent = MiscScroll
+
+local afkTimerCorner = Instance.new("UICorner")
+afkTimerCorner.CornerRadius = UDim.new(0, 6)
+afkTimerCorner.Parent = afkTimerLabel
+
+afkToggle.MouseButton1Click:Connect(function()
+    antiAfkEnabled = not antiAfkEnabled
+    if antiAfkEnabled then
+        afkToggle.BackgroundColor3 = Color3.fromRGB(60, 180, 80)
+        afkToggle.Text = "Anti-AFK: ON"
+        afkToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+        afkStartTime = tick()
+        print("🟢 Anti-AFK Enabled - You can stay online for days!")
+    else
+        afkToggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+        afkToggle.Text = "Anti-AFK: OFF"
+        afkToggle.TextColor3 = Color3.fromRGB(255, 100, 100)
+        afkTimerLabel.Text = "Uptime: 00:00:00"
+        print("🔴 Anti-AFK Disabled")
+    end
+end)
+
+-- Proper Anti-AFK System (NO AUTO KICK)
+task.spawn(function()
+    while task.wait(1) do
+        if antiAfkEnabled then
+            local uptime = tick() - afkStartTime
+            local hours = math.floor(uptime / 3600)
+            local minutes = math.floor((uptime % 3600) / 60)
+            local seconds = math.floor(uptime % 60)
+            afkTimerLabel.Text = string.format("Uptime: %02d:%02d:%02d", hours, minutes, seconds)
+            
+            -- Simulate activity every 2 minutes to prevent AFK kick
+            if uptime % 120 < 1 then
+                -- Simulate small camera movement
+                local camera = workspace.CurrentCamera
+                if camera then
+                    camera.CFrame = camera.CFrame * CFrame.Angles(0, math.rad(1), 0)
+                end
+            end
+        end
+    end
+end)
+
+-- Update canvas sizes when layout changes
+local function updateCanvasSize(layout, scroll)
+    layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        scroll.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+    end)
+end
+
+updateCanvasSize(ShopListLayout, ShopScroll)
+updateCanvasSize(GearListLayout, GearScroll)
+updateCanvasSize(EggListLayout, EggScroll)
+updateCanvasSize(MerchantListLayout, MerchantScroll)
+updateCanvasSize(EventListLayout, EventScroll)
+updateCanvasSize(MiscListLayout, MiscScroll)
