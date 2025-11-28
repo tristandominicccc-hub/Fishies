@@ -691,15 +691,6 @@ local eventCorner = Instance.new("UICorner")
 eventCorner.CornerRadius = UDim.new(0, 8)
 eventCorner.Parent = eventContainer
 
--- Avatar Image (PROPERLY CENTERED)
-local avatarImage = Instance.new("ImageLabel")
-avatarImage.Size = UDim2.new(0, 80, 0, 80)
-avatarImage.Position = UDim2.new(0.5, -40, 0.2, -40) -- Properly centered horizontally
-avatarImage.AnchorPoint = Vector2.new(0.5, 0.5)
-avatarImage.BackgroundTransparency = 1
-avatarImage.Image = "." -- Your avatar image
-avatarImage.Parent = eventContainer
-
 -- Message Label
 local eventMessage = Instance.new("TextLabel")
 eventMessage.Size = UDim2.new(0.8, 0, 0, 80)
