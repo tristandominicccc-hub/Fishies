@@ -697,7 +697,7 @@ avatarImage.Size = UDim2.new(0, 80, 0, 80)
 avatarImage.Position = UDim2.new(0.5, -40, 0.2, -40) -- Properly centered horizontally
 avatarImage.AnchorPoint = Vector2.new(0.5, 0.5)
 avatarImage.BackgroundTransparency = 1
-avatarImage.Image = "rbxassetid://93209308587194" -- Your avatar image
+avatarImage.Image = "." -- Your avatar image
 avatarImage.Parent = eventContainer
 
 -- Message Label
