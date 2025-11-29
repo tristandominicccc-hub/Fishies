@@ -9,6 +9,7 @@ local RunService = game:GetService("RunService")
 local KeySystemEnabled = true
 local CorrectKey = "FishiesKey-ResetSat6" -- Your correct key
 local KeyLink = "https://direct-link.net/1452085/hyaofWms4dEL" -- Your Linkvertise link
+local DiscordLink = "https://discord.gg/ZRZ6N5Ef8" -- Your Discord link
 
 -- Create main screen GUI
 local ScreenGui = Instance.new("ScreenGui")
@@ -122,20 +123,38 @@ SubmitCorner.Parent = SubmitButton
 -- Get Key Button
 local GetKeyButton = Instance.new("TextButton")
 GetKeyButton.Name = "GetKeyButton"
-GetKeyButton.Size = UDim2.new(0.8, 0, 0, 25)
-GetKeyButton.Position = UDim2.new(0.5, 0, 0.85, 0)
+GetKeyButton.Size = UDim2.new(0.38, 0, 0, 25) -- Made smaller to fit Discord button
+GetKeyButton.Position = UDim2.new(0.25, 0, 0.85, 0) -- Adjusted position
 GetKeyButton.AnchorPoint = Vector2.new(0.5, 0)
 GetKeyButton.BackgroundColor3 = Color3.fromRGB(50, 100, 180)
 GetKeyButton.BorderSizePixel = 0
-GetKeyButton.Text = "GET KEY FROM LINK"
+GetKeyButton.Text = "GET KEY"
 GetKeyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 GetKeyButton.Font = Enum.Font.Gotham
-GetKeyButton.TextSize = 12
+GetKeyButton.TextSize = 11
 GetKeyButton.Parent = KeyFrame
 
 local GetKeyCorner = Instance.new("UICorner")
 GetKeyCorner.CornerRadius = UDim.new(0, 4)
 GetKeyCorner.Parent = GetKeyButton
+
+-- Discord Button
+local DiscordButton = Instance.new("TextButton")
+DiscordButton.Name = "DiscordButton"
+DiscordButton.Size = UDim2.new(0.38, 0, 0, 25) -- Same size as Get Key button
+DiscordButton.Position = UDim2.new(0.75, 0, 0.85, 0) -- Positioned next to Get Key button
+DiscordButton.AnchorPoint = Vector2.new(0.5, 0)
+DiscordButton.BackgroundColor3 = Color3.fromRGB(88, 101, 242) -- Discord blurple color
+DiscordButton.BorderSizePixel = 0
+DiscordButton.Text = "DISCORD"
+DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordButton.Font = Enum.Font.Gotham
+DiscordButton.TextSize = 11
+DiscordButton.Parent = KeyFrame
+
+local DiscordCorner = Instance.new("UICorner")
+DiscordCorner.CornerRadius = UDim.new(0, 4)
+DiscordCorner.Parent = DiscordButton
 
 -- Status Label
 local StatusLabel = Instance.new("TextLabel")
@@ -448,6 +467,18 @@ GetKeyButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Discord Button Event
+DiscordButton.MouseButton1Click:Connect(function()
+    local success = copyToClipboard(DiscordLink)
+    if success then
+        StatusLabel.Text = "Discord link copied to clipboard!"
+        StatusLabel.TextColor3 = Color3.fromRGB(88, 101, 242) -- Discord color
+    else
+        StatusLabel.Text = "Failed to copy Discord link"
+        StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 100)
+    end
+end)
+
 KeyBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then SubmitButton.MouseButton1Click:Connect() end
 end)
@@ -469,6 +500,14 @@ GetKeyButton.MouseEnter:Connect(function()
 end)
 GetKeyButton.MouseLeave:Connect(function()
     TweenService:Create(GetKeyButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 100, 180)}):Play()
+end)
+
+-- Discord Button animations
+DiscordButton.MouseEnter:Connect(function()
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(108, 121, 262)}):Play()
+end)
+DiscordButton.MouseLeave:Connect(function()
+    TweenService:Create(DiscordButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(88, 101, 242)}):Play()
 end)
 
 -- Mobile drag functionality
