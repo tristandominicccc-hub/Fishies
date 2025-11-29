@@ -7,7 +7,7 @@ local RunService = game:GetService("RunService")
 
 -- Key system variables
 local KeySystemEnabled = true
-local CorrectKey = "FishiesKey-ResetSat6" -- Your correct key
+local CorrectKey = "DUMINIK.GG" -- Your correct key
 local KeyLink = "https://direct-link.net/1452085/hyaofWms4dEL" -- Your Linkvertise link
 local DiscordLink = "https://discord.gg/ZRZ6N5Ef8" -- Your Discord link
 
@@ -73,7 +73,7 @@ KeyTitle.Size = UDim2.new(1, 0, 0, 40)
 KeyTitle.Position = UDim2.new(0, 0, 0, 0)
 KeyTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 KeyTitle.BorderSizePixel = 0
-KeyTitle.Text = "KEY SYSTEM"
+KeyTitle.Text = "TYPE DUMINIK.GG FOR KEY"
 KeyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyTitle.Font = Enum.Font.GothamBold
 KeyTitle.TextSize = 16
